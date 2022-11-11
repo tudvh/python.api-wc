@@ -1,11 +1,11 @@
 from lxml import html
-import requests
+import requests, json
 
 def getAll():
     page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
-    
-    list_group = []
+
+    list_group = {}
 
     for i in range(7, 13):
         thtml = tree.xpath('//*[@id="mw-content-text"]/div[1]/table[{}]'.format(i))
@@ -17,6 +17,6 @@ def getAll():
         list_ten_doi = thtml[0].xpath('.//tr[position()>1]/th//a//text()')
         
         # them vao list
-        list_group.append(list_ten_doi)
+        list_group.update({ten_group : list_ten_doi})
 
-    return list_ten_doi
+    return list_group
