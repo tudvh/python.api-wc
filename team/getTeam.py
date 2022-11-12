@@ -50,7 +50,7 @@ class team_class:
 
 
 def getAll():
-    page = requests.get('https://en.wikipedia.org/wiki/2018_FIFA_World_Cup')
+    page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
 
     list_group = {}
