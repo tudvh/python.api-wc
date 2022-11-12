@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
-from module.team import get_team
-from module import match
+from module1.team import get_team
+from module1 import match
 
 
 app = Flask(__name__)
