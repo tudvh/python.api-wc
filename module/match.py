@@ -1,6 +1,12 @@
 import requests
 from lxml import html
-import datetime
+
+import sys
+# caution: path[0] is reserved for script path (or '' in REPL)
+sys.path.insert(1, '/path/to/python.api-wc/module')
+import xu_li
+
+
 
 class Team(object):
     def __init__(self):
@@ -47,16 +53,11 @@ class Match(object):
         self.stage=stage
 
 
-def formatTime(date,time,utc):
-    date=date.split('-')
-    time=time.split(':')
-    cr=datetime.datetime( int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]))
-    cr=cr+datetime.timedelta(hours=+(7-int(utc[3:])))
-    return str(cr)
+
 
 def getAllMatch():
     listMatch=[]
-    url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup#Schedule"
+    url = "https://en.wikipedia.org/wiki/2022_FIFA_World_Cup#Schedule"
     page = requests.get(url)
     document = html.fromstring(page.content)
     data = document.xpath(
@@ -70,9 +71,14 @@ def getAllMatch():
         #Lấy giờ đấu
         time = line.xpath('.//div[@class="ftime"]//text()')
         #Lấy múi giờ
-        utc = line.xpath('.//div[@class="ftime"]//a//text()')
+        utc = line.xpath('.//div[@class="ftime"]//a[2]//text()')
         #Chuyển qua việt nam
-        kq=formatTime(date[0],time[0],utc[1]).split(' ')      
+        
+        if(len(utc)==0):
+            utc=[]
+            utc.append('UTC+3')
+               
+        kq=xu_li.formatTime(date[0],time[0],utc[0]).split(' ')      
         m.setDate(kq[0])
         m.setTime(kq[1])
         #Lấy đôi nhà
@@ -82,8 +88,8 @@ def getAllMatch():
         hTeam.setName(hometeam[0])
         iconhome = line.xpath(
             './/th[@class="fhome"]//span[@class="flagicon"]//img//@src')
-        if(len(iconhome)!=0):
-            hTeam.setIcon(iconhome[0])
+        if(len(iconhome)!=0): 
+            hTeam.setIcon(xu_li.lam_net_anh(iconhome[0],'500'))
         m.setHomeT(hTeam.__dict__)
         #Lấy tỉ số
         score = line.xpath('.//th[@class="fscore"]//a//text()')
@@ -98,7 +104,7 @@ def getAllMatch():
         iconaway = line.xpath(
             './/th[@class="faway"]//span[@class="flagicon"]//img//@src')
         if(len(iconaway)!=0):
-            aTeam.setIcon(iconaway[0])
+            aTeam.setIcon(xu_li.lam_net_anh(iconaway[0],'500'))
         m.setAwayT(aTeam.__dict__)
 
         #Lấy bàn thắng home Team
