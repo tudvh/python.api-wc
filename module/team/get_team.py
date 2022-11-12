@@ -1,5 +1,6 @@
 from lxml import html
 import requests
+from module.xu_li import lam_net_anh
 
 
 class team_class(object):
@@ -14,6 +15,7 @@ class team_class(object):
 
     def get_link_image(self):
         link_image = self.__link_html[0].xpath('./th//img/@src')[0]
+        link_image = lam_net_anh(link_image, '500')
         return link_image
 
     def get_position(self):
