@@ -1,6 +1,6 @@
 import requests
 from lxml import html
-
+import datetime
 
 class Team(object):
     def __init__(self):
@@ -46,9 +46,17 @@ class Match(object):
     def setStage(self,stage):
         self.stage=stage
 
+
+def formatTime(date,time,utc):
+    date=date.split('-')
+    time=time.split(':')
+    cr=datetime.datetime( int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]))
+    cr=cr+datetime.timedelta(hours=+(7-int(utc[3:])))
+    return str(cr)
+
 def getAllMatch():
     listMatch=[]
-    url = "https://en.wikipedia.org/wiki/2022_FIFA_World_Cup#Schedule"
+    url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup#Schedule"
     page = requests.get(url)
     document = html.fromstring(page.content)
     data = document.xpath(
@@ -59,19 +67,18 @@ def getAllMatch():
         #Lấy ngày đấu
         date = line.xpath(
             './/span[@class="bday dtstart published updated"]//text()')
-        
-        m.setDate(date[0])
-        
-
         #Lấy giờ đấu
         time = line.xpath('.//div[@class="ftime"]//text()')
-        m.setTime(time[0])
-
+        #Lấy múi giờ
+        utc = line.xpath('.//div[@class="ftime"]//a//text()')
+        #Chuyển qua việt nam
+        kq=formatTime(date[0],time[0],utc[1]).split(' ')      
+        m.setDate(kq[0])
+        m.setTime(kq[1])
         #Lấy đôi nhà
         hTeam=Team()
         hometeam = line.xpath(
-            './/th[@class="fhome"]//span//a//text()|.//th[@class="fhome"]//span//text()')
-        
+            './/th[@class="fhome"]//span//a//text()|.//th[@class="fhome"]//span//text()')  
         hTeam.setName(hometeam[0])
         iconhome = line.xpath(
             './/th[@class="fhome"]//span[@class="flagicon"]//img//@src')
