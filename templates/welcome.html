@@ -21,6 +21,10 @@
             font-family: 'Roboto', sans-serif;
         }
 
+        .hidden {
+            display: none;
+        }
+
         .container {
             margin-top: 32px;
         }
@@ -31,12 +35,16 @@
             margin-bottom: 32px;
         }
 
-        .team .row {
+        .row {
             margin-bottom: 8px;
         }
 
-        .team .row * {
+        .row * {
             width: fit-content;
+        }
+        
+        .row select{
+            cursor: pointer;
         }
     </style>
 </head>
@@ -64,7 +72,7 @@
                     <option value="7">Group G</option>
                     <option value="8">Group H</option>
                 </select>
-                <a href="#" id="group_link" target="_blank"></a>
+                <a href="#" id="group_link" target="_blank" class="hidden"></a>
             </div>
         </div>
 
@@ -83,12 +91,14 @@
             myOptionSelect = myOption[grSelect.selectedIndex].innerHTML
 
             // don't show html if group_value == 0
-            if(group_value == 0) {
+            if (group_value == 0) {
                 grLink.innerHTML = ''
                 grLink.setAttribute('href', '#')
+                grLink.classList.add('hidden');
             } else {
                 grLink.innerHTML = 'Get team by ' + myOptionSelect
-                grLink.setAttribute('href', './team/get-by-group/'+group_value)
+                grLink.setAttribute('href', './team/get-by-group/' + group_value)
+                grLink.classList.remove('hidden')
             }
         }
     </script>
