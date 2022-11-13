@@ -34,3 +34,18 @@ def compareDate(day1,day2):
         return -1
     else:
         return 0
+
+def isNum(string):
+    try:
+        int(string)
+        return True
+    except:
+        return False
+
+def isBool(string):
+    try:
+        eval(string.title())
+        return True
+    except:
+        return False
+
