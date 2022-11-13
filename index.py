@@ -33,81 +33,27 @@ def getAll():
 
 @app.route("/match/get-by-status", methods=["GET"])
 def getMatchByDate():
-    rq=request.args  
-    if('status' not in rq):
-        data={
-            'status':'Success',
+    rq = request.args
+
+    if ('status' not in rq):
+        data = {
+            'status': 'success',
             'data': match.getMatch(None)
         }
-    elif(xu_li.isNum(rq['status']) or xu_li.isBool(rq['status'])==False):
-            data={
-            'status':'Error',
-            'data': 'Status is bool'
-        }
-    else :
-        todo=eval(rq['status'].title())
-        
-        data={
-            'status':'Success',
-            'data': match.getMatch(todo)
-        }      
-    return data
+    else:
+        if (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
+            data = {
+                'status': 'error',
+                'data': 'status is bool'
+            }
+        else:
+            todo = eval(rq['status'].title())
 
-@app.route("/match/stage/<stage>", methods=["GET"])
-def getMatchStage(stage):
-    rq=request.args
-    if(not match.checkStage(stage,None)):
-        data={
-            'status':'Error',
-            'message': 'Stage is not correct'
-        } 
-    elif('status' not in rq):
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,None,None)
-        }
-    elif(xu_li.isNum(rq['status']) or xu_li.isBool(rq['status'])==False):
-            data={
-            'status':'Error',
-            'message': 'Status is bool'
-        }
-    else :
-        status=eval(rq['status'].title())
-        
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,None,status)
-        }  
-        
-    return data
+            data = {
+                'status': 'success',
+                'data': match.getMatch(todo)
+            }
 
-@app.route("/match/stage/<stage>/<nameStage>", methods=["GET"])
-def getMatchNameStage(stage,nameStage):
-    rq=request.args
-    
-    if(not match.checkStage(stage,nameStage)):
-        data={
-            'status':'Error',
-            'message': 'Stage is not correct'
-        } 
-    elif('status' not in rq):
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,nameStage,None)
-        }
-    elif(xu_li.isNum(rq['status']) or xu_li.isBool(rq['status'])==False):
-            data={
-            'status':'Error',
-            'message': 'Status is bool'
-        }
-    else :
-        status=eval(rq['status'].title())
-        
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,nameStage,status)
-        }  
-        
     return data
 
 
