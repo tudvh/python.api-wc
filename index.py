@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from module.team import get_team
 from module import match
 
@@ -23,7 +23,16 @@ def getTeamByGroup(id_group):
 
 @app.route("/match/get-all", methods=["GET"])
 def getAll():
-    return jsonify(match.getAllMatch())
+    todo={}
+    return jsonify(match.getAllMatch(todo))
+
+@app.route("/match/get-by-date", methods=["GET"])
+def getMatchByDate():
+    rq=request.args
+    date = rq.get('date')   
+    print(rq)
+    
+    return jsonify(match.getAllMatch(rq))
 
 
 if __name__ == "__main__":

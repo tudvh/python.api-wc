@@ -1,10 +1,10 @@
 import requests
 from lxml import html
 
-import sys
+#import sys
 # caution: path[0] is reserved for script path (or '' in REPL)
-sys.path.insert(1, '/path/to/python.api-wc/module')
-import xu_li
+#sys.path.insert(1, 'python.api-wc/module')
+from module import xu_li
 
 
 
@@ -55,7 +55,7 @@ class Match(object):
 
 
 
-def getAllMatch():
+def getAllMatch(todo):
     listMatch=[]
     url = "https://en.wikipedia.org/wiki/2022_FIFA_World_Cup#Schedule"
     page = requests.get(url)
@@ -78,7 +78,7 @@ def getAllMatch():
             utc=[]
             utc.append('UTC+3')
                
-        kq=xu_li.formatTime(date[0],time[0],utc[0]).split(' ')      
+        kq=str(xu_li.formatTime(date[0],time[0],utc[0])).split(' ')      
         m.setDate(kq[0])
         m.setTime(kq[1])
         #Lấy đôi nhà
@@ -163,4 +163,4 @@ def getAllMatch():
 
 
 
-getAllMatch()
+print(getAllMatch(1)[0]['homeT']['name'])

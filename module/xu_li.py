@@ -21,4 +21,16 @@ def formatTime(date,time,utc):
     time=time.split(':')
     cr=datetime.datetime( int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]))
     cr=cr+datetime.timedelta(hours=+(7-int(utc[3:])))
-    return str(cr)
+    return cr
+
+def compareDate(day1,day2):
+    #format day type (%Y-%m-%d)
+    fm='%Y-%m-%d'
+    day1 = datetime.datetime.strptime(day1,fm)
+    day1 = datetime.datetime.strptime(day2,fm)
+    if(day1>day2):
+        return 1
+    elif(day1<day2):
+        return -1
+    else:
+        return 0
