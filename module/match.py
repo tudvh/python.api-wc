@@ -74,6 +74,8 @@ class Match(object):
 def getDate(match):
     return match['date']
 
+def getTimeGoal(goal):
+    return goal['timeG']
 
 def checkStage(stage, nameStage):
 
@@ -186,7 +188,7 @@ def getMatch(status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listHomeG.append(goal.__dict__)
-
+        listHomeG.sort(key=getTimeGoal)
         m.setHomeG(listHomeG)
 
         # Lấy bàn thắng đội khách
@@ -208,6 +210,7 @@ def getMatch(status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listAwayG.append(goal.__dict__)
+        listAwayG.sort(key=getTimeGoal)
         m.setAwatG(listAwayG)
 
         # Láy tỉ số pen
@@ -324,7 +327,7 @@ def getMatchStage(stage, nameStage, status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listHomeG.append(goal.__dict__)
-
+        listHomeG.sort(key=getTimeGoal)
         m.setHomeG(listHomeG)
 
         # Lấy bàn thắng đội khách
@@ -346,6 +349,7 @@ def getMatchStage(stage, nameStage, status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listAwayG.append(goal.__dict__)
+        listAwayG.sort(key=getTimeGoal)
         m.setAwatG(listAwayG)
 
         # Láy tỉ số pen
