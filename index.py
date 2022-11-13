@@ -25,35 +25,36 @@ def getTeamByGroup(id_group):
 
 @app.route("/match/get-all", methods=["GET"])
 def getAll():
-    data={
-        'status':'success',
-        'data':match.getAllMatch()
+    data = {
+        'status': 'success',
+        'data': match.getAllMatch()
     }
     return data
 
+
 @app.route("/match/get-by-status", methods=["GET"])
 def getMatchByDate():
-    rq=request.args
-    
-    if('status' not in rq):
-        data={
-            'status':'success',
+    rq = request.args
+
+    if ('status' not in rq):
+        data = {
+            'status': 'success',
             'data': match.getMatch(None)
         }
-    else:  
-        if(xu_li.isNum(rq['status']) or xu_li.isBool(rq['status'])==False):
-            data={
-            'status':'error',
-            'data': 'status is bool'
-        }
-        else :
-            todo=eval(rq['status'].title())
-            
-            data={
-                'status':'success',
+    else:
+        if (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
+            data = {
+                'status': 'error',
+                'data': 'status is bool'
+            }
+        else:
+            todo = eval(rq['status'].title())
+
+            data = {
+                'status': 'success',
                 'data': match.getMatch(todo)
             }
-       
+
     return data
 
 

@@ -1,5 +1,6 @@
 import datetime
 
+
 def lam_net_anh(link, so):
 
     # link = //upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Flag_of_Serbia.svg/23px-Flag_of_Serbia.svg.png
@@ -16,24 +17,28 @@ def lam_net_anh(link, so):
 
     return link_moi
 
-def formatTime(date,time,utc):
-    date=date.split('-')
-    time=time.split(':')
-    cr=datetime.datetime( int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]))
-    cr=cr+datetime.timedelta(hours=+(7-int(utc[3:])))
+
+def formatTime(date, time, utc):
+    date = date.split('-')
+    time = time.split(':')
+    cr = datetime.datetime(int(date[0]), int(
+        date[1]), int(date[2]), int(time[0]), int(time[1]))
+    cr = cr+datetime.timedelta(hours=+(7-int(utc[3:])))
     return cr
 
-def compareDate(day1,day2):
-    #format day type (%Y-%m-%d)
-    fm='%Y-%m-%d'
-    day1 = datetime.datetime.strptime(day1,fm)
-    day1 = datetime.datetime.strptime(day2,fm)
-    if(day1>day2):
+
+def compareDate(day1, day2):
+    # format day type (%Y-%m-%d)
+    fm = '%Y-%m-%d'
+    day1 = datetime.datetime.strptime(day1, fm)
+    day1 = datetime.datetime.strptime(day2, fm)
+    if (day1 > day2):
         return 1
-    elif(day1<day2):
+    elif (day1 < day2):
         return -1
     else:
         return 0
+
 
 def isNum(string):
     try:
@@ -42,10 +47,10 @@ def isNum(string):
     except:
         return False
 
+
 def isBool(string):
     try:
         eval(string.title())
         return True
     except:
         return False
-
