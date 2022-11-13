@@ -15,7 +15,7 @@ class team_class(object):
 
     def get_link_image(self):
         link_image = self.__link_html[0].xpath('./th//img/@src')[0]
-        link_image = lam_net_anh(link_image, '500')
+        link_image = lam_net_anh(link_image, '5000')
         return link_image
 
     def get_position(self):

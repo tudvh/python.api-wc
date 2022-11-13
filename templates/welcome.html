@@ -33,35 +33,58 @@
             font-weight: bold;
             text-align: center;
             margin-bottom: 32px;
+            color: #FEC310;
+        }
+
+        h3 {
+            font-weight: bold;
+            color: #49BCE3;
+        }
+
+        .object {
+            margin-top: 32px;
         }
 
         .row {
             margin-bottom: 8px;
+            align-items: center;
         }
 
         .row * {
             width: fit-content;
+            color: #ffffff;
         }
-        
-        .row select{
+
+        .row select,
+        .row select option {
             cursor: pointer;
+            color: #000;
+        }
+
+        .row a {
+            color: #1077C3;
         }
     </style>
 </head>
 
-<body>
+<body style="background-color: #56042C">
+
     <div class="container">
+
         <h1>Welcome to API World Cup 2022 of Team Red Dog</h1>
 
-        <div class="team">
+        <div class="object">
+
             <h3>Team</h3>
+
             <div class="row">
                 <span>- Get all team: </span>
-                <a href="./team/get-all" target="_blank">click here</a>
+                <a href="./team/get-all" target="_blank">Click here</a>
             </div>
+
             <div class="row">
                 <span>- Get team by group: </span>
-                <select class="form-select form-select-sm" onchange="chose_group()" id="group_select">
+                <select class="form-select form-select-sm" onchange="chose_team_group()" id="team_group_select">
                     <option selected disabled value="0">-- Chose group --</option>
                     <option value="1">Group A</option>
                     <option value="2">Group B</option>
@@ -72,16 +95,36 @@
                     <option value="7">Group G</option>
                     <option value="8">Group H</option>
                 </select>
-                <a href="#" id="group_link" target="_blank" class="hidden"></a>
+                <a href="#" id="team_group_link" target="_blank" class="hidden"></a>
             </div>
         </div>
 
+        <div class="object">
+
+            <h3>Match</h3>
+
+            <div class="row">
+                <span>- Get all match: </span>
+                <a href="./match/get-all" target="_blank">Click here</a>
+            </div>
+
+            <div class="row">
+                <span>- Get match by status: </span>
+                <select class="form-select form-select-sm" onchange="chose_status_match()" id="match_status_select">
+                    <option selected disabled value="0">-- Chose status --</option>
+                    <option value="">All</option>
+                    <option value="?status=true">Finished</option>
+                    <option value="?status=false">Unfinished</option>
+                </select>
+                <a href="#" id="match_status_link" target="_blank" class="hidden"></a>
+            </div>
+        </div>
     </div>
 
     <script>
-        function chose_group() {
-            grSelect = document.getElementById('group_select')
-            grLink = document.getElementById('group_link')
+        function chose_team_group() {
+            grSelect = document.getElementById('team_group_select')
+            grLink = document.getElementById('team_group_link')
 
             // get group_value to set link
             group_value = grSelect.value
@@ -99,6 +142,26 @@
                 grLink.innerHTML = 'Get team by ' + myOptionSelect
                 grLink.setAttribute('href', './team/get-by-group/' + group_value)
                 grLink.classList.remove('hidden')
+            }
+        }
+
+        function chose_status_match() {
+
+            mSelect = document.getElementById('match_status_select')
+            mLink = document.getElementById('match_status_link')
+            
+            // get match_status_value to set link
+            match_status_value = mSelect.value
+            
+            // don't show html if match_status_value == 0
+            if (match_status_value == '0') {
+                mLink.innerHTML = ''
+                mLink.setAttribute('href', '#')
+                mLink.classList.add('hidden');
+            } else {
+                mLink.innerHTML = 'Get team by status'
+                mLink.setAttribute('href', './match/get-by-status' + match_status_value)
+                mLink.classList.remove('hidden')
             }
         }
     </script>
