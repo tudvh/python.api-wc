@@ -113,6 +113,9 @@ def getMatchNameStage(stage,nameStage):
         
     return data
 
+@app.route("/stage/get-all")
+def getAllStage():
+    return match.getNameStage()
 
 if __name__ == "__main__":
     app.run()
