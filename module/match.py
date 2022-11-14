@@ -17,7 +17,7 @@ class Team(object):
         self.name = name
 
     def setIcon(self, icon):
-        self.icon = icon
+        self.icon = 'Https:'+icon
 
 
 class Goal(object):
@@ -33,7 +33,7 @@ class Goal(object):
         self.timeG = timeG
 
     def setType(self, type):
-        self.type = type
+        self.type = type.rstrip('.')
 
 
 class Match(object):
