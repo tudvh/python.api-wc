@@ -24,9 +24,9 @@ def getTeamByGroup(id_group):
 
 @app.route("/match/get-all", methods=["GET"])
 def getAll():
-    data={
-        'status':'success',
-        'data':match.getMatch(None)
+    data = {
+        'status': 'success',
+        'data': match.getMatch(None)
     }
     return data
 

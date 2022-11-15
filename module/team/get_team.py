@@ -91,20 +91,18 @@ def get_by_group(id_group):
     page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
 
-    list_group = {}
-
-    id_table = int(id_group) + 7 - 1  # table[7] la bang A
-    thtml = tree.xpath(
-        '//*[@id="mw-content-text"]/div[1]/table[{}]'.format(id_table))
+    h3html = tree.xpath('//h3/span[@id="Group_A"]')[0]
+    table = h3html.xpath('../following-sibling::table[1]')
 
     # lay ten group
-    name_group = thtml[0].xpath(
-        'preceding-sibling::h3/span[1]//text()')[-1]
+    name_group = h3html.text
+
+    list_group = {}
 
     # lay doi
     list_team = []
     for j in range(2, 6):
-        team = team_class(thtml[0].xpath('.//tr[{}]'.format(j)))
+        team = team_class(table[0].xpath('.//tr[{}]'.format(j)))
         team.get_all()
         team.__dict__.pop('_team_class__link_html')
         list_team.append(team.__dict__)
