@@ -8,7 +8,6 @@ from module import xu_li
 
 url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup#Schedule"
 
-
 class Team(object):
     def __init__(self):
         self.icon = None
@@ -18,7 +17,7 @@ class Team(object):
         self.name = name
 
     def setIcon(self, icon):
-        self.icon = icon
+        self.icon = 'Https:'+icon
 
 
 class Goal(object):
@@ -34,7 +33,7 @@ class Goal(object):
         self.timeG = timeG
 
     def setType(self, type):
-        self.type = type
+        self.type = type.rstrip('.')
 
 
 class Match(object):
@@ -71,10 +70,20 @@ class Match(object):
     def setNameStage(self, nameStage):
         self.nameStage = nameStage
 
+class Stage(object):
+    def __init__(self,):
+        self.stage=None
+        self.nameStage=None
+    def setStage(self,stage):
+        self.stage=stage
+    def setNameStage(self,nameStage):
+        self.nameStage=nameStage
 
 def getDate(match):
     return match['date']
 
+def getTimeGoal(goal):
+    return goal['timeG']
 
 def checkStage(stage, nameStage):
 
@@ -187,7 +196,7 @@ def getMatch(status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listHomeG.append(goal.__dict__)
-
+        listHomeG.sort(key=getTimeGoal)
         m.setHomeG(listHomeG)
 
         # Lấy bàn thắng đội khách
@@ -209,6 +218,7 @@ def getMatch(status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listAwayG.append(goal.__dict__)
+        listAwayG.sort(key=getTimeGoal)
         m.setAwatG(listAwayG)
 
         # Láy tỉ số pen
@@ -325,7 +335,7 @@ def getMatchStage(stage, nameStage, status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listHomeG.append(goal.__dict__)
-
+        listHomeG.sort(key=getTimeGoal)
         m.setHomeG(listHomeG)
 
         # Lấy bàn thắng đội khách
@@ -347,6 +357,7 @@ def getMatchStage(stage, nameStage, status):
                     if (len(typegoal)):
                         goal.setType(typegoal[0])
                     listAwayG.append(goal.__dict__)
+        listAwayG.sort(key=getTimeGoal)
         m.setAwatG(listAwayG)
 
         # Láy tỉ số pen
@@ -363,3 +374,25 @@ def getMatchStage(stage, nameStage, status):
         listMatch.sort(key=getDate, reverse=False)
 
     return listMatch
+
+def getNameStage():
+    page = requests.get(url)
+    document = html.fromstring(page.content)
+    data = document.xpath(
+        '//div[@id="toc"]//ul//a[contains(@href,"stage")]')
+    listStage=[]
+    for dong in data:
+        
+        name=dong.xpath('..//a[contains(@href,"stage")]//@href')[0].strip('#')
+        xp=dong.xpath('..//ul//li//a//@href')
+        stage=Stage()
+        listName=[]
+        for x in xp:
+            if(not('Bracket' in x)):
+                listName.append(x.strip('#'))
+        stage.setStage(name)
+        stage.setNameStage(listName)
+        print(listName)
+        listStage.append(stage.__dict__)
+    return listStage
+
