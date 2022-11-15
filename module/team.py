@@ -120,7 +120,8 @@ def get_by_group(id_group):
         list_team.append(team.__dict__)
 
     # them vao list
-    list_group['data'][name_group] = list_team
+    list_group['group_name'] = name_group
+    list_group['data'] = list_team
 
     return list_group
 
