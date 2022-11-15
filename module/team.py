@@ -1,7 +1,6 @@
 from lxml import html
 import requests
-from module.xu_li import lam_net_anh
-from module import match
+# from module.xu_li import lam_net_anh
 
 
 class team_class(object):
@@ -16,7 +15,7 @@ class team_class(object):
 
     def get_link_image(self):
         link_image = self.__link_html[0].xpath('./th//img/@src')[0]
-        link_image = lam_net_anh(link_image, '5000')
+        # link_image = lam_net_anh(link_image, '5000')
         return link_image
 
     def get_position(self):
@@ -91,15 +90,15 @@ def get_all():
 def get_by_group(id_group):
 
     list_group = {
-        'status':'Error',
+        'status': 'Error',
         'message': 'Group is not correct'
     }
 
-    if(not match.checkStage("Group_stage", id_group)):
-        return list_group
-
     page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
+
+    if (checkStage(id_group, tree) != 1):
+        return list_group
 
     h3html = tree.xpath('//h3/span[@id="{}"]'.format(id_group))[0]
     table = h3html.xpath('../following-sibling::table[1]')
@@ -108,8 +107,8 @@ def get_by_group(id_group):
     name_group = h3html.text
 
     list_group = {
-        'status' : 'success',
-        'data' : {}
+        'status': 'success',
+        'data': {}
     }
 
     # lay doi
@@ -124,3 +123,10 @@ def get_by_group(id_group):
     list_group['data'][name_group] = list_team
 
     return list_group
+
+
+def checkStage(id_group, tree):
+    data = tree.xpath('//a[@href="#Group_stage"]')[0]
+    group = data.xpath(
+        'following-sibling::*//a[@href="{}"]'.format('#'+id_group))
+    return len(group)
