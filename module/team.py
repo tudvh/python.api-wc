@@ -1,6 +1,7 @@
 from lxml import html
 import requests
 from module.xu_li import lam_net_anh
+from module import match
 
 
 class team_class(object):
@@ -88,16 +89,28 @@ def get_all():
 
 
 def get_by_group(id_group):
+
+    list_group = {
+        'status':'Error',
+        'message': 'Group is not correct'
+    }
+
+    if(not match.checkStage("Group_stage", id_group)):
+        return list_group
+
     page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
 
-    h3html = tree.xpath('//h3/span[@id="Group_A"]')[0]
+    h3html = tree.xpath('//h3/span[@id="{}"]'.format(id_group))[0]
     table = h3html.xpath('../following-sibling::table[1]')
 
     # lay ten group
     name_group = h3html.text
 
-    list_group = {}
+    list_group = {
+        'status' : 'success',
+        'data' : {}
+    }
 
     # lay doi
     list_team = []
@@ -108,6 +121,6 @@ def get_by_group(id_group):
         list_team.append(team.__dict__)
 
     # them vao list
-    list_group[name_group] = list_team
+    list_group['data'][name_group] = list_team
 
     return list_group

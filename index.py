@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request
-from module.team import get_team
+from module import team
 from module import match
 from module import xu_li
 
@@ -14,12 +14,12 @@ def getWelcome():
 
 @app.route("/team/get-all", methods=["GET"])
 def getTeam():
-    return get_team.get_all()
+    return team.get_all()
 
 
 @app.route("/team/get-by-group/<id_group>", methods=["GET"])
 def getTeamByGroup(id_group):
-    return get_team.get_by_group(id_group)
+    return team.get_by_group(id_group)
 
 
 @app.route("/match/get-all", methods=["GET"])

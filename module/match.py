@@ -6,7 +6,8 @@ from lxml import html
 #sys.path.insert(1, 'python.api-wc/module')
 from module import xu_li
 
-url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup#Schedule"
+url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup"
+
 
 class Team(object):
     def __init__(self):
@@ -70,23 +71,28 @@ class Match(object):
     def setNameStage(self, nameStage):
         self.nameStage = nameStage
 
+
 class Stage(object):
     def __init__(self,):
-        self.stage=None
-        self.nameStage=None
-    def setStage(self,stage):
-        self.stage=stage
-    def setNameStage(self,nameStage):
-        self.nameStage=nameStage
+        self.stage = None
+        self.nameStage = None
+
+    def setStage(self, stage):
+        self.stage = stage
+
+    def setNameStage(self, nameStage):
+        self.nameStage = nameStage
+
 
 def getDate(match):
     return match['date']
 
+
 def getTimeGoal(goal):
     return goal['timeG']
 
-def checkStage(stage, nameStage):
 
+def checkStage(stage, nameStage):
     page = requests.get(url)
     document = html.fromstring(page.content)
     data = document.xpath(
@@ -375,24 +381,25 @@ def getMatchStage(stage, nameStage, status):
 
     return listMatch
 
+
 def getNameStage():
     page = requests.get(url)
     document = html.fromstring(page.content)
     data = document.xpath(
         '//div[@id="toc"]//ul//a[contains(@href,"stage")]')
-    listStage=[]
+    listStage = []
     for dong in data:
-        
-        name=dong.xpath('..//a[contains(@href,"stage")]//@href')[0].strip('#')
-        xp=dong.xpath('..//ul//li//a//@href')
-        stage=Stage()
-        listName=[]
+
+        name = dong.xpath(
+            '..//a[contains(@href,"stage")]//@href')[0].strip('#')
+        xp = dong.xpath('..//ul//li//a//@href')
+        stage = Stage()
+        listName = []
         for x in xp:
-            if(not('Bracket' in x)):
+            if (not ('Bracket' in x)):
                 listName.append(x.strip('#'))
         stage.setStage(name)
         stage.setNameStage(listName)
         print(listName)
         listStage.append(stage.__dict__)
     return listStage
-
