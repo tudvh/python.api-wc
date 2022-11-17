@@ -10,40 +10,40 @@ class team_class(object):
 
     # method
     def get_name(self):
-        name = self.__link_html[0].xpath('./th//a//text()')[0]
+        name = self.__link_html.xpath('./th//a//text()')[0]
         return name
 
     def get_link_image(self):
-        link_image = self.__link_html[0].xpath('./th//img/@src')[0]
+        link_image = self.__link_html.xpath('./th//img/@src')[0]
         link_image = lam_net_anh(link_image, '5000')
         return link_image
 
     def get_position(self):
-        position = self.__link_html[0].xpath('./td[1]//text()')[0]
+        position = self.__link_html.xpath('./td[1]//text()')[0]
         return position[0]
 
     def get_played(self):
-        played = self.__link_html[0].xpath('./td[2]//text()')[0]
+        played = self.__link_html.xpath('./td[2]//text()')[0]
         return played[0]
 
     def get_won(self):
-        won = self.__link_html[0].xpath('./td[3]//text()')[0]
+        won = self.__link_html.xpath('./td[3]//text()')[0]
         return won[0]
 
     def get_drawn(self):
-        drawn = self.__link_html[0].xpath('./td[4]//text()')[0]
+        drawn = self.__link_html.xpath('./td[4]//text()')[0]
         return drawn[0]
 
     def get_lost(self):
-        lost = self.__link_html[0].xpath('./td[5]//text()')[0]
+        lost = self.__link_html.xpath('./td[5]//text()')[0]
         return lost[0]
 
     def get_goal_difference(self):
-        goal_difference = self.__link_html[0].xpath('./td[6]//text()')[0]
+        goal_difference = self.__link_html.xpath('./td[6]//text()')[0]
         return goal_difference[0]
 
     def get_points(self):
-        points = self.__link_html[0].xpath('./td[9]//text()')[0]
+        points = self.__link_html.xpath('./td[9]//text()')[0]
         return points[0]
 
     # export
@@ -63,71 +63,82 @@ def get_all():
     page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
 
-    list_group = {}
+    list_group_id_html = tree.xpath(
+        '//ul[preceding-sibling::a[@href="#Group_stage"]]/li/a/@href')
 
-    for i in range(7, 15):
-        thtml = tree.xpath(
-            '//*[@id="mw-content-text"]/div[1]/table[{}]'.format(i))
+    list_group = []
+
+    group = {}
+    for group_id_html in list_group_id_html:
+        group_id = group_id_html[1:]
 
         # lay ten group
-        name_group = thtml[0].xpath(
-            'preceding-sibling::h3/span[1]//text()')[-1]
+        name_group_html = tree.xpath(
+            '//span[@id="{}"]'.format(group_id))[0]
 
-        # lay doi
-        list_team = []
-        for j in range(2, 6):
-            team = team_class(thtml[0].xpath('.//tr[{}]'.format(j)))
-            team.get_all()
-            team.__dict__.pop('_team_class__link_html')
-            list_team.append(team.__dict__)
+        # tro toi vi tri html cua team
+        table_html = name_group_html.xpath(
+            '../following-sibling::table[1]')[0]
+        # lay team
+        list_team = get_team(table_html)
 
-        # them vao list
-        list_group[name_group] = list_team
+        # them vao group
+        group['group_name'] = name_group_html.text
+        group['team'] = list_team
+
+        # them vao list group
+        list_group.append(group.copy())
 
     return list_group
 
 
 def get_by_group(id_group):
-
-    list_group = {
-        'status': 'Error',
-        'message': 'Group is not correct'
-    }
-
     page = requests.get('https://en.wikipedia.org/wiki/2022_FIFA_World_Cup')
     tree = html.fromstring(page.content)
 
     if (checkStage(id_group, tree) != 1):
+        list_group = {
+            'status': 'Error',
+            'message': 'Group is not correct'
+        }
         return list_group
 
-    h3html = tree.xpath('//h3/span[@id="{}"]'.format(id_group))[0]
-    table = h3html.xpath('../following-sibling::table[1]')
+    group_name_html = tree.xpath('//h3/span[@id="{}"]'.format(id_group))[0]
 
     # lay ten group
-    name_group = h3html.text
+    name_group = group_name_html.text
 
     list_group = {
         'status': 'success',
-        'data': {}
     }
 
-    # lay doi
-    list_team = []
-    for j in range(2, 6):
-        team = team_class(table[0].xpath('.//tr[{}]'.format(j)))
-        team.get_all()
-        team.__dict__.pop('_team_class__link_html')
-        list_team.append(team.__dict__)
+    table_html = group_name_html.xpath('../following-sibling::table[1]')[0]
+    # lay team
+    list_team = get_team(table_html)
 
     # them vao list
     list_group['group_name'] = name_group
-    list_group['data'] = list_team
+    list_group['team'] = list_team
 
     return list_group
 
 
+def get_team(table_html):
+    list_team = []
+
+    list_team_html = table_html.xpath('.//tr[td]')
+
+    for team_html in list_team_html:
+        team = team_class(team_html)
+        team.get_all()
+        team.__dict__.pop('_team_class__link_html')
+        list_team.append(team.__dict__.copy())
+
+    return list_team
+
+
 def checkStage(id_group, tree):
-    data = tree.xpath('//a[@href="#Group_stage"]')[0]
-    group = data.xpath(
-        'following-sibling::*//a[@href="{}"]'.format('#'+id_group))
+    group = tree.xpath(
+        '//ul[preceding-sibling::a[@href="#Group_stage"]][.//a[@href="#{}"]]'.format(id_group))
+
     return len(group)
