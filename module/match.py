@@ -18,7 +18,7 @@ class Team(object):
         self.name = name
 
     def setIcon(self, icon):
-        self.icon = 'Https:'+icon
+        self.icon = 'https:'+icon
 
 
 class Goal(object):
