@@ -56,67 +56,70 @@ def getMatchByDate():
 
     return data
 
+
 @app.route("/match/stage/<stage>", methods=["GET"])
 def getMatchStage(stage):
-    rq=request.args
-    if(not match.checkStage(stage,None)):
-        data={
-            'status':'Error',
+    rq = request.args
+    if (not match.checkStage(stage, None)):
+        data = {
+            'status': 'Error',
             'message': 'Stage is not correct'
-        } 
-    elif('status' not in rq):
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,None,None)
         }
-    elif(xu_li.isNum(rq['status']) or xu_li.isBool(rq['status'])==False):
-            data={
-            'status':'Error',
+    elif ('status' not in rq):
+        data = {
+            'status': 'Success',
+            'data': match.getMatchStage(stage, None, None)
+        }
+    elif (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
+        data = {
+            'status': 'Error',
             'message': 'Status is bool'
         }
-    else :
-        status=eval(rq['status'].title())
-        
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,None,status)
-        }  
-        
+    else:
+        status = eval(rq['status'].title())
+
+        data = {
+            'status': 'Success',
+            'data': match.getMatchStage(stage, None, status)
+        }
+
     return data
 
+
 @app.route("/match/stage/<stage>/<nameStage>", methods=["GET"])
-def getMatchNameStage(stage,nameStage):
-    rq=request.args
-    
-    if(not match.checkStage(stage,nameStage)):
-        data={
-            'status':'Error',
+def getMatchNameStage(stage, nameStage):
+    rq = request.args
+
+    if (not match.checkStage(stage, nameStage)):
+        data = {
+            'status': 'Error',
             'message': 'Stage is not correct'
-        } 
-    elif('status' not in rq):
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,nameStage,None)
         }
-    elif(xu_li.isNum(rq['status']) or xu_li.isBool(rq['status'])==False):
-            data={
-            'status':'Error',
+    elif ('status' not in rq):
+        data = {
+            'status': 'Success',
+            'data': match.getMatchStage(stage, nameStage, None)
+        }
+    elif (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
+        data = {
+            'status': 'Error',
             'message': 'Status is bool'
         }
-    else :
-        status=eval(rq['status'].title())
-        
-        data={
-            'status':'Success',
-            'data': match.getMatchStage(stage,nameStage,status)
-        }  
-        
+    else:
+        status = eval(rq['status'].title())
+
+        data = {
+            'status': 'Success',
+            'data': match.getMatchStage(stage, nameStage, status)
+        }
+
     return data
+
 
 @app.route("/stage/get-all")
 def getAllStage():
     return match.getNameStage()
 
+
 if __name__ == "__main__":
     app.run()
-
