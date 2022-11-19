@@ -373,11 +373,8 @@ def getMatchStage(stage, nameStage, status):
 
         listMatch.append(m.__dict__)
 
-    # Sắp xếp theo ngày
-    if (stage):
-        listMatch.sort(key=getDate, reverse=True)
-    else:
-        listMatch.sort(key=getDate, reverse=False)
+    # Sắp xếp theo ngày 
+    listMatch.sort(key=getDate, reverse=False)
 
     return listMatch
 
