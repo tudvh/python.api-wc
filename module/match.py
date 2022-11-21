@@ -6,7 +6,7 @@ from lxml import html
 #sys.path.insert(1, 'python.api-wc/module')
 from module import xu_li
 
-url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup"
+url = "https://en.wikipedia.org/wiki/2022_FIFA_World_Cup"
 
 
 class Team(object):
