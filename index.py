@@ -9,7 +9,9 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def getWelcome():
-    return render_template('welcome.html')
+    
+    listStage=match.getNameStage()
+    return render_template('welcome.html',listStage=listStage)
 
 
 @app.route("/team/get-all", methods=["GET"])
@@ -73,7 +75,7 @@ def getMatchStage(stage):
     elif (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
         data = {
             'status': 'Error',
-            'message': 'Status is bool'
+            'message': 'status is bool'
         }
     else:
         status = eval(rq['status'].title())
@@ -126,12 +128,12 @@ def getTop10(top):
     if ('status' not in rq):
         data = {
             'status': 'Error',
-            'message':'Need variable Status'
+            'message':'Need variable status'
         }
     elif (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
         data = {
             'status': 'Error',
-            'message': 'Status is bool'
+            'message': 'status is bool'
         }
     elif((not xu_li.isNum(top)) or int(top)<=0):
         data={
