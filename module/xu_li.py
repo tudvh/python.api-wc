@@ -23,7 +23,8 @@ def formatTime(date, time, utc):
     time = time.split(':')
     cr = datetime.datetime(int(date[0]), int(
         date[1]), int(date[2]), int(time[0]), int(time[1]))
-    cr = cr+datetime.timedelta(hours=+(7-int(utc[3:])))
+    if(utc!=None):
+        cr = cr+datetime.timedelta(hours=+(7-int(utc[3:])))
     return cr.__format__('%Y-%m-%d %H:%M')
 
 

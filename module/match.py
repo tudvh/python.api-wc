@@ -6,7 +6,7 @@ from lxml import html
 #sys.path.insert(1, 'python.api-wc/module')
 from module import xu_li
 
-url = "https://en.wikipedia.org/wiki/2018_FIFA_World_Cup"
+url = "https://en.wikipedia.org/wiki/2022_FIFA_World_Cup"
 
 
 class Team(object):
@@ -85,7 +85,7 @@ class Stage(object):
 
 
 def getDate(match):
-    return match['date']
+    return xu_li.formatTime(match['date'],match['time'],None)
 
 
 def getTimeGoal(goal):
@@ -112,7 +112,8 @@ def checkStage(stage, nameStage):
 
 
 def getMatch(status):
-
+    
+    
     listMatch = []
     page = requests.get(url)
     document = html.fromstring(page.content)
@@ -400,3 +401,13 @@ def getNameStage():
         print(listName)
         listStage.append(stage.__dict__)
     return listStage
+
+def getTop(top,status):
+
+    list=getMatch(status)
+    size=len(list)
+    top=int(top)
+    if(top<=size):
+        return list[:(top)]
+    else:
+        return list

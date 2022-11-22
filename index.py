@@ -120,6 +120,33 @@ def getMatchNameStage(stage, nameStage):
 def getAllStage():
     return match.getNameStage()
 
+@app.route("/match/top/<top>")
+def getTop10(top):
+    rq = request.args
+    if ('status' not in rq):
+        data = {
+            'status': 'Error',
+            'message':'Need variable Status'
+        }
+    elif (xu_li.isNum(rq['status']) or xu_li.isBool(rq['status']) == False):
+        data = {
+            'status': 'Error',
+            'message': 'Status is bool'
+        }
+    elif((not xu_li.isNum(top)) or int(top)<=0):
+        data={
+            'status': 'Error',
+            'message':'Top is Number and Than 0'
+        }
+    else:
+        status = eval(rq['status'].title())
+        data={
+            
+            'status':'Success',
+            'data':match.getTop(top,status)
+        }
+    return data
+
 
 if __name__ == "__main__":
     app.run()
