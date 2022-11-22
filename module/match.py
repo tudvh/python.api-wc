@@ -41,6 +41,9 @@ class Match(object):
     def __init__(self):
         self.scorePen = None
 
+    def setIDMatch(self, id_match):
+        self.id_match = id_match
+
     def setDate(self, date):
         self.date = date
 
@@ -85,7 +88,7 @@ class Stage(object):
 
 
 def getDate(match):
-    return xu_li.formatTime(match['date'],match['time'],None)
+    return xu_li.formatTime(match['date'], match['time'], None)
 
 
 def getTimeGoal(goal):
@@ -112,8 +115,6 @@ def checkStage(stage, nameStage):
 
 
 def getMatch(status):
-    
-    
     listMatch = []
     page = requests.get(url)
     document = html.fromstring(page.content)
@@ -122,15 +123,26 @@ def getMatch(status):
 
     for line in data:
         m = Match()
+
+        # lấy id
+        link = line.xpath(
+            './/a[@rel="nofollow"]/@href')[0]
+        arrayLink = link.split('/')
+        id_match = arrayLink[-4] + '/' + arrayLink[-3] + \
+            '/' + arrayLink[-2] + '/' + arrayLink[-1]
+        m.setIDMatch(id_match)
+
         # Lấy ngày đấu
         date = line.xpath(
             './/span[@class="bday dtstart published updated"]//text()')
+
         # Lấy giờ đấu
         time = line.xpath('.//div[@class="ftime"]//text()')
+
         # Lấy múi giờ
         utc = line.xpath('.//div[@class="ftime"]//a[2]//text()')
-        # Chuyển qua việt nam
 
+        # Chuyển qua việt nam
         if (len(utc) == 0):
             utc = []
             utc.append('UTC+3')
@@ -159,7 +171,7 @@ def getMatch(status):
             continue
         m.setScore(score[0])
 
-        # Lấy đôi nhà
+        # Lấy đội nhà
         hTeam = Team()
         hometeam = line.xpath(
             './/th[@class="fhome"]//span//a//text()|.//th[@class="fhome"]//span//text()')
@@ -188,7 +200,6 @@ def getMatch(status):
         # gHome=data[7].xpath('.//tbody//tr[2]//td[@class="fhgoal"]//li')
 
         for g in gHome:
-
             time = g.xpath('./span[@class="fb-goal"]/span/text()')
             i = 1
             for x in time:
@@ -211,7 +222,6 @@ def getMatch(status):
         gAway = line.xpath('.//tbody//tr[2]//td[@class="fagoal"]//li')
 
         for g in gAway:
-
             time = g.xpath('./span[@class="fb-goal"]/span/text()')
 
             for x in time:
@@ -228,14 +238,14 @@ def getMatch(status):
         listAwayG.sort(key=getTimeGoal)
         m.setAwatG(listAwayG)
 
-        # Láy tỉ số pen
+        # Lấy tỉ số pen
         scorePen = line.xpath('.//tbody//tr[4]/th/text()')
         if (len(scorePen) != 0):
             m.setScorePen(scorePen[0])
 
         listMatch.append(m.__dict__)
 
-    # Sắp xếp theo ngày
+    # Sắp xếp list trận đấu theo ngày
     if (status):
         listMatch.sort(key=getDate, reverse=True)
     else:
@@ -374,7 +384,7 @@ def getMatchStage(stage, nameStage, status):
 
         listMatch.append(m.__dict__)
 
-    # Sắp xếp theo ngày 
+    # Sắp xếp theo ngày
     listMatch.sort(key=getDate, reverse=False)
 
     return listMatch
@@ -402,12 +412,12 @@ def getNameStage():
         listStage.append(stage.__dict__)
     return listStage
 
-def getTop(top,status):
 
-    list=getMatch(status)
-    size=len(list)
-    top=int(top)
-    if(top<=size):
+def getTop(top, status):
+    list = getMatch(status)
+    size = len(list)
+    top = int(top)
+    if (top <= size):
         return list[:(top)]
     else:
         return list
