@@ -2,7 +2,6 @@ import datetime
 
 
 def lam_net_anh(link, so):
-
     # link = //upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Flag_of_Serbia.svg/23px-Flag_of_Serbia.svg.png
     # so = 500
 
@@ -23,7 +22,7 @@ def formatTime(date, time, utc):
     time = time.split(':')
     cr = datetime.datetime(int(date[0]), int(
         date[1]), int(date[2]), int(time[0]), int(time[1]))
-    if(utc!=None):
+    if (utc != None):
         cr = cr+datetime.timedelta(hours=+(7-int(utc[3:])))
     return cr.__format__('%Y-%m-%d %H:%M')
 
@@ -55,5 +54,3 @@ def isBool(string):
         return True
     except:
         return False
-
-
