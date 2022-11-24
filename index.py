@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request
 from module import team
 from module import match
 from module import xu_li
+import test
 
 
 app = Flask(__name__)
@@ -9,9 +10,13 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def getWelcome():
-
     listStage = match.getNameStage()
     return render_template('welcome.html', listStage=listStage)
+
+
+@app.route("/test", methods=["GET"])
+def testA():
+    return {'data': test.lay_data()}
 
 
 @app.route("/team/get-all", methods=["GET"])
