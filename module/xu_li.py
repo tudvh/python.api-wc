@@ -54,3 +54,13 @@ def isBool(string):
         return True
     except:
         return False
+
+
+def isDay(string):
+    #format is Y-m-d
+    format = '%Y-%m-%d'
+    try:
+        datetime.datetime.strptime(string, format)
+        return True
+    except:
+        return False

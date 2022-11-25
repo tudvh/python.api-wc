@@ -122,7 +122,7 @@ def getAllStage():
     return match.getNameStage()
 
 
-@app.route("/match/top/<top>")
+@app.route("/match/top/<top>", methods=["GET"])
 def getTop10(top):
     rq = request.args
     if ('status' not in rq):
@@ -145,6 +145,27 @@ def getTop10(top):
         data = {
             'status': 'Success',
             'data': match.getTop(top, status)
+        }
+    return data
+
+
+@app.route("/match/date", methods=["GET"])
+def getByDate():
+    rq = request.args
+    if ('date' not in rq):
+        data = {
+            'status': 'Error',
+            'message': 'Need variable date'
+        }
+    elif (not xu_li.isDay(rq['date'])):
+        data = {
+            'status': 'Error',
+            'message': 'date format YYYY-mm-dd'
+        }
+    else:
+        data = {
+            'status': 'Success',
+            'data': match.getByDay(rq['date'])
         }
     return data
 
