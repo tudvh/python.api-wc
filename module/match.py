@@ -42,9 +42,6 @@ class Match(object):
     def __init__(self):
         self.scorePen = None
 
-    def setIDMatch(self, id_match):
-        self.id_match = id_match
-
     def setDate(self, date):
         self.date = date
 
@@ -124,14 +121,6 @@ def getMatch(status):
 
     for line in data:
         m = Match()
-
-        # lấy id
-        link = line.xpath(
-            './/a[@rel="nofollow"]/@href')[0]
-        arrayLink = link.split('/')
-        id_match = arrayLink[-4] + '/' + arrayLink[-3] + \
-            '/' + arrayLink[-2] + '/' + arrayLink[-1]
-        m.setIDMatch(id_match)
 
         # Lấy ngày đấu
         date = line.xpath(
@@ -433,14 +422,6 @@ def getByDay(day):
 
     for line in data:
         m = Match()
-
-        # lấy id
-        link = line.xpath(
-            './/a[@rel="nofollow"]/@href')[0]
-        arrayLink = link.split('/')
-        id_match = arrayLink[-4] + '/' + arrayLink[-3] + \
-            '/' + arrayLink[-2] + '/' + arrayLink[-1]
-        m.setIDMatch(id_match)
 
         # Lấy ngày đấu
         date = line.xpath(
