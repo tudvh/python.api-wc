@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request
 from module import team
 from module import match
 from module import xu_li
+from module import news_video_yt
 
 
 app = Flask(__name__)
@@ -21,6 +22,11 @@ def getTeam():
 @app.route("/team/get-by-group/<id_group>", methods=["GET"])
 def getTeamByGroup(id_group):
     return team.get_by_group(id_group)
+
+
+@app.route("/news/video/youtube", methods=["GET"])
+def getNewsVideoYoutube():
+    return news_video_yt.get()
 
 
 @app.route("/match/get-all", methods=["GET"])
